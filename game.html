@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Black Jack</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/css-playing-cards-gh-pages/cards.css" />
+
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <!-- Angularjs -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular.min.js"></script>
+
+
+    <!-- Scripts -->
+    <!--<script src="user.php"></script>-->
+    <script src="js/app.js"></script>
+    <style>
+        body {
+            background-color: #025E2A;
+        }
+
+        #remove_amount {
+            width: 70px;
+            height: 50px;
+            border-radius: 10px;
+        }
+
+        .card {
+            font-size: 16pt;
+        }
+        h2 .chip{
+            color:#555;
+            text-shadow:2px 2px 3px white;
+        }
+
+        .bigbtn {
+            width: 140px;
+            height: 70px;
+        }
+
+        .pokerchip{
+            margin:20px;
+            font-size:1.2em;
+            position:relative;
+            display:inline-block;
+            -webkit-box-sizing:border-box;
+            -moz-box-sizing:border-box;
+            box-sizing:border-box;
+            width:5em;
+            height:5em;
+            background:#555;
+            border-radius:50%;
+            position:relative;
+            border:.5em dashed white;
+            transition:all .5s ease;
+            backface-visibility:hidden;
+        }
+
+        .pokerchip.red{
+            background:#DD4631;
+        }
+
+        .pokerchip.blue{
+            background:#317DDD;
+        }
+
+        .pokerchip.white {
+            background: white;
+            border-color: #0d5092;
+        }
+        .pokerchip.purple {
+            background: rebeccapurple;
+        }
+
+        .pokerchip.flat{
+            box-shadow:0 0 0 .2em #fff;
+        }
+
+        .pokerchip.iso{
+            transform: perspective(3000px) rotateX(55deg) rotateZ(-40deg);
+            box-shadow:
+                    -1px 1px 0px #555,
+                    -2px 2px 0px #555,
+                    -3px 3px 0px #555,
+                    -4px 4px 0px #555,
+                    -5px 5px 0px #555,
+                    -6px 6px 10px #555;
+        }
+
+        .pokerchip.flat:hover{
+            transform:rotate(90deg);
+        }
+
+        .pokerchip.iso:hover{
+            transform: perspective(3000px) rotateX(55deg) rotateZ(-40deg) translateZ(.5em);
+        }
+    </style>
+
+    <script>
+
+    </script>
+</head>
+
+<body ng-app="Blackjack">
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Game</a>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="home.html">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#addFunds">Add funds<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<main class="container" ng-controller="GameCtrl">
+
+    <!-- Add funds Modal -->
+    <div class="modal fade" id="addFunds">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-tite">Add Funds</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="" action="">
+                        <div class="form-group">
+                            <label class="col-form-label" for="funds">How much money would you like to add?</label>
+                            <input class="form-control" id="funds" ng-model="funds">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" ng-click="addFunds(funds)" name="addFunds" data-dismiss="modal">Add funds</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add game money Modal -->
+    <div class="modal fade" id="addGameMoney">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-tite">Add In Game Money</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="" action="">
+                        <div class="form-group">
+                            <label class="col-form-label" for="money">How much money would you like to add?</label>
+                            <input class="form-control" type="number" id="money" ng-model="addAmount">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" ng-click="addGameMoney()" data-dismiss="modal">Add funds</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gameplay -->
+
+    <!-- Dealer Cards -->
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-8">
+            <h2 style="color: white;" ng-if="dealer_hand_total > 0">Dealer Hand</h2>
+            <table>
+                <tr>
+                    <div class="cards">
+                        <td ng-repeat="card in dealer_hand"><div class="{{card.css}} col-{{card.length}}"><span></span></div></td>
+                    </div>
+                    <td><span class="badge badge-pill badge-light" ng-if="dealer_hand_total > 0" style="font-size: 18pt">{{ dealer_hand_total }}</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bet -->
+    <div class="row m-5">
+        <div class="col-6"></div>
+        <div class="col-3"><h1 style="font-size: 40pt;margin: 15px;"><a class="badge badge-pill badge-info" style="background-color: lightgreen" ng-click="removeBet()">{{ bet }}</a></h1></div>
+        <div class="3">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4>"></div>
+
+    </div>
+    <!-- Actions -->
+    <div class="row">
+        <div class="col-4">
+            <!-- Table -->
+            <table class="table table-hover table-dark" style="width: 200px">
+                <tr>
+                    <th>Username</th>
+                    <td>{{ username }}</td>
+                </tr>
+                <tr>
+                    <th>Balance</th>
+                    <td>{{ account_balance }}</td>
+                </tr>
+                <tr>
+                    <th>Wins</th>
+                    <td>{{ wins }}</td>
+                </tr>
+                <tr>
+                    <th>Losses</th>
+                    <td>{{ losses }}</td>
+                </tr>
+                <tr>
+                    <th>Games Played</th>
+                    <td>{{ games_played }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-5 col"><div class="col-8">
+            <h2 style="color: white;" ng-if="player_hand_total > 0">User Hand</h2>
+            <table>
+                <tr>
+                    <div class="cards">
+                        <td ng-repeat="card in player_hand"><div class="{{card.css}} col-{{card.length}}"><span></span></div></td>
+                        <td><span class="badge badge-pill badge-light" ng-if="player_hand_total > 0" style="font-size: 18pt;">{{ player_hand_total }}</span></td>
+                    </div>
+                </tr>
+            </table>
+        </div></div>
+        <div class="col-3 col">
+            <!-- Action Buttons -->
+            <div style="padding-top: 120px">
+                <row><div class="col" ng-if="game_started == false"><button class="btn btn-warning bigbtn" ng-click="deal()">Deal</button></div></row>
+                <row><div class="col" ng-if="game_started == true"><button class="btn btn-warning bigbtn" ng-click="playerHit()">Hit</button></div></row>
+                <row><div class="col" ng-if="game_started == true"><button class="btn btn-primary bigbtn" ng-click="stand()">Stand</button></div></row>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chips -->
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-10">
+            <div class="pokerchip flat white" ng-if="game_started == false" ng-click="addBet(1)"></div>
+            <div class="pokerchip flat blue" ng-if="game_started == false" ng-click="addBet(5)"></div>
+            <div class="pokerchip flat red" ng-if="game_started == false" ng-click="addBet(25)"></div>
+            <div class="pokerchip flat purple" ng-if="game_started == false" ng-click="addBet(100)"></div>
+            <div class="pokerchip flat black" ng-if="game_started == false" ng-click="addBet(500)"></div>
+        </div>
+    </div>
+
+    <!-- Balance -->
+    <div class="row pt-3">
+        <div class="col-5"></div>
+        <div class="col-7">
+            <h3>
+                <a href="#" data-target="#addGameMoney" data-toggle="modal"><span class="badge badge-pill badge-dark">Game Money:  {{ game_money }}$</span></a>
+                <button class="btn btn-success" ng-click="cashIn()">Cash In</button>
+            </h3>
+        </div>
+    </div>
+
+
+
+</main>
+
+
+</body>
+</html>
