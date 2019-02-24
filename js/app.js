@@ -17,13 +17,22 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
     $scope.games_played = 0;
     $scope.game_money = 0;
     $scope.addAmount = 0;
+    $scope.first_round = false;
+    $scope.insurance_possible = false;
+    $scope.insurance = 0;
+
     $scope.deck = buildDeck();
     $scope.deck = shuffle($scope.deck);
 
-    for (let i = 1; i < $scope.decks; i++) {
+    if ($scope.decks > 1) {
+        for (let i = 1; i < $scope.decks; i++) {
 
-        $scope.deck += buildDeck();
-        $scope.deck = shuffle($scope.deck);
+            $scope.deck += buildDeck();
+            $scope.deck = shuffle($scope.deck);
+        }
+    }
+    else if ($scope.players > 1)   {
+
     }
 
 
@@ -107,7 +116,9 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
     };
 
     $scope.playerHit = function() {
-        $scope.player_hand.push($scope.drawCard());
+        let card = $scope.drawCard();
+        $scope.player_hand.push(card);
+
         $scope.player_hand_total = $scope.total($scope.player_hand);
 
         $timeout(function () {
@@ -120,28 +131,36 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
     };
 
     $scope.dealerHit = function() {
-
-        $scope.dealer_hand.push($scope.drawCard());
+        let card = $scope.drawCard();
+        $scope.dealer_hand.push(card);
         $scope.dealer_hand_total = $scope.total($scope.dealer_hand);
+
+        //insurance
+        if (card.value == 'a')      $scope.insurance_possible = true;
 
         $timeout(function () {
             if ($scope.dealer_hand_total > 21) {
                 alert("Dealer Bust!");
                 $scope.dealer_bust = true;
-                $scope.gameOver();
             }
         }, 1000);
-
     };
 
     $scope.drawCard = function () {
         if ($scope.deck.length < 1) {
             alert("Deck emptied, using new deck");
             $scope.deck = buildDeck();
-            $scope.deck = shuffle()
+            $scope.deck = shuffle();
         }
 
+        $scope.first_round = false;
         return  $scope.deck.shift();
+    };
+
+    $scope.doubleDown = function() {
+        $scope.bet = $scope.bet * 2;
+        $scope.first_round = false;
+        document.querySelector()
     };
 
     $scope.deal = function () {
@@ -149,7 +168,6 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
             alert("Must set a bet");
         else {
             $scope.game_started = true;
-
 
             //user draw two cards
             $scope.playerHit();
@@ -159,6 +177,8 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
             $scope.dealerHit();
             $scope.dealerHit();
             $scope.dealer_hand_total = $scope.total($scope.dealer_hand);
+
+            $scope.first_round = true;
 
             $timeout(function () {
                 if ($scope.player_hand_total > 21) {
@@ -175,15 +195,16 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
 
     $scope.stand = function() {
         while($scope.dealer_hand_total < 17) {
-            // $timeout(function () {
-            //
-            // },1000);
+
             console.log('turn ' + $scope.dealer_hand);
             $scope.dealerHit();
         }
 
-        if ($scope.dealer_hand_total > 21)  $scope.dealer_bust = true;
-        $scope.gameOver();
+        $timeout(function () {
+
+            if ($scope.dealer_hand_total > 21)  $scope.dealer_bust = true;
+            $scope.gameOver();
+        },1000);
     };
 
     $scope.gameOver = function () {
@@ -218,7 +239,6 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
             alert("Player won the game");
             $scope.wins++;
             let funds;
-
             if ($scope.player_hand_total == 21) funds = 2.5 * $scope.bet;
             else                                funds = 2 * $scope.bet;
 
@@ -226,15 +246,17 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
         }
 
         else if ($scope.dealerWon) {
+            if ($scope.dealer_hand_total == 21)
+                $scope.bet += $scope.insurance;
             $scope.losses++;
             $scope.bet = 0;
             alert("Dealer won");
         }
 
-        else  {
-            alert("Draw");
+        else if (!$scope.playerWon && !$scope.dealerWon) {
             $scope.game_money += $scope.bet;
             $scope.draws++;
+            alert("Draw");
         }
         console.log($scope.player_hand_total + " " + $scope.dealer_hand_total);
         console.log($scope.player_bust + " " + $scope.dealer_bust);
@@ -252,12 +274,41 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
         $scope.dealer_hand_total = 0;
         $scope.dealer_bust = false;
         $scope.player_bust = false;
+        $scope.first_round = false;
+        $scope.insurance_possible = false;
+        $scope.insurance = 0;
+
     };
 
     $scope.cashIn = function () {
         $scope.addFunds($scope.game_money);
         $scope.game_money = 0;
-    }
+    };
+
+    $scope.setInsurance = function () {
+        $scope.insurance = ($scope.bet/2);
+        $scope.insurance_possible = false;
+    };
+
+    $scope.addInsurance = function(ins) {
+        if (ins > $scope.game_money)
+            alert("Not enough funds");
+
+        else {
+            $scope.insurance = $scope.insurance + ins;
+            $scope.game_money -= ins;
+        }
+    };
+
+    $scope.removeInsurance = function () {
+        if ($scope.insurance  < 1) {
+            return false;
+        }
+        else {
+            $scope.game_money += $scope.insurance;
+            $scope.insurance = 0;
+        }
+    };
 
     $scope.addBet = function(bet) {
 
@@ -285,13 +336,13 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
 
         for(let i = 0; i < hand.length; i++){
             if (hand[i].value == 'j')
-                total += 11;
+                total += 10;
             else if (hand[i].value == 'q')
-                total += 12;
+                total += 10;
             else if (hand[i].value == 'k')
-                total += 13;
+                total += 10;
             else if (hand[i].value == 'a')
-                total += 1;
+                total += 11;
             else
                 total += hand[i].value;
         }
@@ -299,10 +350,12 @@ app.controller('GameCtrl', function ($scope, $interval, $timeout) {
         return total;
     }
 
-    $scope.setDecks = function (decks) {
+    $scope.saveSettings = function (decks,players) {
         for (let i = 0; i < decks.length; i++) {
             $scope.decks = decks;
         }
+
+        $scope.players = players;
     };
 
     function buildSuit(suitname) {

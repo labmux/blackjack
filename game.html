@@ -131,7 +131,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-tite">Add Funds</h4>
+                    <h4 class="modal-title">Add Funds</h4>
                 </div>
                 <div class="modal-body">
                     <form method="" action="">
@@ -154,7 +154,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-tite">Add In Game Money</h4>
+                    <h4 class="modal-title">Add In Game Money</h4>
                 </div>
                 <div class="modal-body">
                     <form method="" action="">
@@ -172,8 +172,6 @@
         </div>
     </div>
 
-    <!-- Gameplay -->
-
     <!-- Dealer Cards -->
     <div class="row">
         <div class="col-4"></div>
@@ -184,28 +182,15 @@
                     <div class="cards">
                         <td ng-repeat="card in dealer_hand"><div class="{{card.css}} col-{{card.length}}"><span></span></div></td>
                     </div>
-                    <td><span class="badge badge-pill badge-light" ng-if="dealer_hand_total > 0" style="font-size: 18pt">{{ dealer_hand_total }}</span></td>
+                    <td style="padding-bottom: 150px"><span class="badge badge-pill badge-light" ng-if="dealer_hand_total > 0" style="font-size: 18pt">{{ dealer_hand_total }}</span></td>
                 </tr>
             </table>
         </div>
     </div>
 
     <!-- Bet -->
-    <div class="row m-5">
-        <div class="col-6"></div>
-        <div class="col-3"><h1 style="font-size: 40pt;margin: 15px;"><a class="badge badge-pill badge-info" style="background-color: lightgreen" ng-click="removeBet()">{{ bet }}</a></h1></div>
-        <div class="3">
-
-        </div>
-    </div>
-
     <div class="row">
-        <div class="col-4>"></div>
-
-    </div>
-    <!-- Actions -->
-    <div class="row">
-        <div class="col-4">
+        <div class="col-5">
             <!-- Table -->
             <table class="table table-hover table-dark" style="width: 200px">
                 <tr>
@@ -229,21 +214,14 @@
                     <td>{{ games_played }}</td>
                 </tr>
             </table>
+            <a href="#" class="badge badge-pill badge-info" style=" font-size: 25pt;margin: 15px; background-color: darkgrey" ng-if="game_started == true && insurance_possible == true || insurance > 0" ng-click="removeInsurance">{{ insurance }}</a>
         </div>
-        <div class="col-5 col"><div class="col-8">
-            <h2 style="color: white;" ng-if="player_hand_total > 0">User Hand</h2>
-            <table>
-                <tr>
-                    <div class="cards">
-                        <td ng-repeat="card in player_hand"><div class="{{card.css}} col-{{card.length}}"><span></span></div></td>
-                        <td><span class="badge badge-pill badge-light" ng-if="player_hand_total > 0" style="font-size: 18pt;">{{ player_hand_total }}</span></td>
-                    </div>
-                </tr>
-            </table>
-        </div></div>
-        <div class="col-3 col">
+        <div class="col-4"><h1 style="font-size: 40pt;margin: 15px;"><a class="badge badge-pill badge-info" style="background-color: lightgreen" ng-click="removeBet()">{{ bet }}</a></h1></div>
+        <div class="col-3">
             <!-- Action Buttons -->
-            <div style="padding-top: 120px">
+            <div>
+                <row><div class="col pb-2"><button class="btn btn-warning" ng-if="game_started == true && insurance_possible == true" ng-click="setInsurance()">Place Insurance</button></div></row>
+                <row><div class="col" ng-if="first_round == true"><button class="btn btn-danger bigbtn" ng-click="doubleDown()">Double Down</button></div></row>
                 <row><div class="col" ng-if="game_started == false"><button class="btn btn-warning bigbtn" ng-click="deal()">Deal</button></div></row>
                 <row><div class="col" ng-if="game_started == true"><button class="btn btn-warning bigbtn" ng-click="playerHit()">Hit</button></div></row>
                 <row><div class="col" ng-if="game_started == true"><button class="btn btn-primary bigbtn" ng-click="stand()">Stand</button></div></row>
@@ -251,26 +229,45 @@
         </div>
     </div>
 
-    <!-- Chips -->
-    <div class="row">
-        <div class="col-2"></div>
-        <div class="col-10">
-            <div class="pokerchip flat white" ng-if="game_started == false" ng-click="addBet(1)"></div>
-            <div class="pokerchip flat blue" ng-if="game_started == false" ng-click="addBet(5)"></div>
-            <div class="pokerchip flat red" ng-if="game_started == false" ng-click="addBet(25)"></div>
-            <div class="pokerchip flat purple" ng-if="game_started == false" ng-click="addBet(100)"></div>
-            <div class="pokerchip flat black" ng-if="game_started == false" ng-click="addBet(500)"></div>
+    <div style="">
+        <!-- Actions -->
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-5 col"><div class="col-8">
+                <h2 style="color: white;" ng-if="player_hand_total > 0">User Hand</h2>
+                <table>
+                    <tr>
+                        <div class="cards">
+                            <td ng-repeat="card in player_hand"><div class="{{card.css}} col-{{card.length}}"><span></span></div></td>
+                            <td style="padding-bottom: 150px"><span class="badge badge-pill badge-light" ng-if="player_hand_total > 0" style="font-size: 18pt;">{{ player_hand_total }}</span></td>
+                        </div>
+                    </tr>
+                </table>
+            </div></div>
+            <div class="col-3 col"></div>
         </div>
-    </div>
 
-    <!-- Balance -->
-    <div class="row pt-3">
-        <div class="col-5"></div>
-        <div class="col-7">
-            <h3>
-                <a href="#" data-target="#addGameMoney" data-toggle="modal"><span class="badge badge-pill badge-dark">Game Money:  {{ game_money }}$</span></a>
-                <button class="btn btn-success" ng-click="cashIn()">Cash In</button>
-            </h3>
+        <!-- Chips -->
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-10">
+                <div class="pokerchip flat white" ng-if="game_started == false" ng-click="addBet(1)"></div>
+                <div class="pokerchip flat blue" ng-if="game_started == false" ng-click="addBet(5)"></div>
+                <div class="pokerchip flat red" ng-if="game_started == false" ng-click="addBet(25)"></div>
+                <div class="pokerchip flat purple" ng-if="game_started == false" ng-click="addBet(100)"></div>
+                <div class="pokerchip flat black" ng-if="game_started == false" ng-click="addBet(500)"></div>
+            </div>
+        </div>
+
+        <!-- Balance -->
+        <div class="row pt-3">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <h3>
+                    <a href="#" data-target="#addGameMoney" data-toggle="modal"><span class="badge badge-pill badge-dark">Game Money:  {{ game_money }}$</span></a>
+                    <button class="btn btn-success" ng-click="cashIn()">Cash In</button>
+                </h3>
+            </div>
         </div>
     </div>
 
