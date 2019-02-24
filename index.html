@@ -10,13 +10,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
-    <script src="loginform.js"></script>
+    <script src="Loginpage/loginform.js"></script>
 </head>
 <body>
 
 <main class="container mt-3">
     <h1 class="text-center" style="padding-bottom: 55px; padding-top: 60px">Login</h1>
-    <form name="loginForm" method="post" action="login.php" class="custom-validation mt-3" onsubmit="return validateForm();">
+    <form name="loginForm" method="post" action="Loginpage/login.php" class="custom-validation mt-3" onsubmit="return validateForm();">
         <!-- Username-->
         <div class="form-row">
             <div class="col-3"></div>
@@ -57,7 +57,7 @@
                     <h4 class="modal-title">Change password</h4>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="login.php" name="changePasswordForm" onsubmit="return newPasswordValidation()">
+                    <form method="post" action="Loginpage/login.php" name="changePasswordForm" onsubmit="return newPasswordValidation()">
                         <div class="form-group">
                             <label class="col-form-label" for="user">Username</label>
                             <input type="text" class="form-control" name="username" id="user" name="user">

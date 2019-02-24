@@ -13,7 +13,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST['signin'])) {
         if (!userExists($pdo,$username)) {
             throwAlert("Username doesnt exist.");
-            redirect("login.html");
+            redirect("../index.html");
         }
         else {
             if(checkLogin($pdo,$username,$password)) {
@@ -22,7 +22,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             else {
                 throwAlert("Username and password do not match");
-                redirect("login.html");
+                redirect("../index.html");
             }
         }
     }
@@ -30,7 +30,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "SignUp";
         if(userExists($pdo,$username)) {
             throwAlert("Username already exists. Please chose a different name");
-            redirect("login.html");
+            redirect("../index.html");
         }
         else {
             createUser($pdo,$username,$password);
@@ -50,7 +50,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         else
             throwAlert("Password username dont match");
 
-        redirect("login.html");
+        redirect("../index.html");
 
     }
 }
